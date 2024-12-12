@@ -10,14 +10,14 @@ Make people heard. Share their opinions, creativity and knowledge via a somewhat
 Platform that combines art, political expression, freedom of speech, and community interaction.
 
 ### Assumptions
-common hatred connects people 🤪
-engagement  on multiple levels: 
-politics
-inexperience with graffiti - curiosity
-experimenting/fun
-people like to get rid of frustration, maybe an interesting way to do it?
-everybody has a bit anarchistic/anti-system side to them, so this may release it; 
-if not, they will realize they have it
+- common hatred connects people 🤪
+- engagement  on multiple levels: 
+   - politics
+   - inexperience with graffiti - curiosity
+   - experimenting/fun
+- people like to get rid of frustration, maybe an interesting way to do it?
+- everybody has a bit anarchistic/anti-system side to them, so this may release it; 
+   - if not, they will realize they have it
 
 
 
