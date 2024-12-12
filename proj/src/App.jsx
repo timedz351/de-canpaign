@@ -3,15 +3,14 @@ import P5Wrapper from './P5Wrapper';
 import sketch from './sketch';
 
 const App = () => {
-  const [p5Instance, setP5Instance] = useState(null);
-
   // States for parameters
   const [brushSize, setBrushSize] = useState(30);
-  const [color, setColor] = useState('#000000');
+  const [color, setColor] = useState('#ff0000');
   const [mode, setMode] = useState('spray'); // 'spray' or 'marker'
   const [ovalness, setOvalness] = useState(1);
   const [rotation, setRotation] = useState(0);
   const [dripsEnabled, setDripsEnabled] = useState(true);
+
 
   // Refs to p5 setter functions and methods
   const setBrushSizeRef = useRef(null);
@@ -20,6 +19,8 @@ const App = () => {
   const setOvalnessRef = useRef(null);
   const setRotationRef = useRef(null);
   const setDripsEnabledRef = useRef(null);
+  const undoLastActionRef = useRef(null)
+  const clearLayerRef = useRef(null)
 
   // Update p5 parameters when states change
   useEffect(() => {
@@ -50,22 +51,33 @@ const App = () => {
     setMode(prev => (prev === 'spray' ? 'marker' : 'spray'));
   };
 
+  const handleUndo = () => {
+    if (undoLastActionRef.current) {
+      undoLastActionRef.current();
+    };
+  }
+
+  const handleClear = () => {
+    if (clearLayerRef.current) {
+      clearLayerRef.current();
+
+    };
+  }
+
   return (
     <div
       className="app-container"
     >
       <P5Wrapper
         sketch={sketch}
-        onLoad={(p5Instance) => {
-          // Capture undo and clear references once
-          setP5Instance(p5Instance)
-        }}
         setBrushSize={(fn) => (setBrushSizeRef.current = fn)}
         setColor={(fn) => (setColorRef.current = fn)}
         setMode={(fn) => (setModeRef.current = fn)}
         setOvalness={(fn) => (setOvalnessRef.current = fn)}
         setRotation={(fn) => (setRotationRef.current = fn)}
         setDripsEnabled={(fn) => (setDripsEnabledRef.current = fn)}
+        undoLastAction={(fn) => (undoLastActionRef.current = fn)}
+        clearLayer={(fn) => (clearLayerRef.current = fn)}
 
       />
 
@@ -138,9 +150,9 @@ const App = () => {
           <p>Current Mode: {mode}</p>
         </div>
 
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button onClick={() => {if (p5Instance) p5Instance.undoLastAction();}}>Undo (Z)</button>
-          <button onClick={() => {if (p5Instance) p5Instance.clearCanvas();}}>Clear (C)</button>
+        <div style={{ display: 'block', gap: '20px' }}>
+          <button onClick={handleUndo}>Undo (Z)</button>
+          <button onClick={handleClear}>Clear (C)</button>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ const sketch = (p) => {
   let smoothedMouseY = 0;
 
   let currentBrushSize = 30;
+
   let currentColor;
   let currentOvalness = 1;
   let currentRotation = 0;
@@ -57,7 +58,7 @@ const sketch = (p) => {
 
   // Attach these methods to p right away:
   p.undoLastAction = undoLastAction;
-  p.clearCanvas = clearCanvas;
+  p.clearLayer = clearCanvas;
 
   // Attach setters before setup so they're available at onLoad
   p.setBrushSize = (newSize) => {
