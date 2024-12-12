@@ -1,8 +1,8 @@
 import "./BillboardSelector.css";
 
 const billboards = [
-  { id: 1, name: "pele", src: "/images/pele.jpg" },
-  { id: 2, name: "simecka", src: "/images/pele1.jpg" },
+  { id: 1, name: "pele", src: "/de-canpaign/images/pele.jpg" },
+  { id: 2, name: "simecka", src: "/de-canpaign/images/pele1.jpg" },
 ];
 
 // eslint-disable-next-line react/prop-types

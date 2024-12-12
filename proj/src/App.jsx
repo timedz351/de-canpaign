@@ -29,6 +29,26 @@ const App = () => {
   const handleClear = () => {
     setClearCounter(prev => prev + 1);
   }
+  
+  const handleSaveToServer = () => {
+    // Get the canvas element from p5 - by default react-p5-wrapper creates a canvas in the DOM
+    const canvas = document.querySelector('canvas'); 
+    if (canvas) {
+      const dataURL = canvas.toDataURL('image/png'); // Convert canvas to base64 image data
+      fetch('http://localhost:3001/save-image', { // Point to your Node server
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: dataURL })
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('Image saved:', data);
+      })
+      .catch(err => {
+        console.error('Error saving image:', err);
+      });
+    }
+  };
 
   // If no billboard selected, show the selector
   if (!selectedBillboard) {
@@ -123,6 +143,10 @@ const App = () => {
         <div>
           <button onClick={() => setSelectedBillboard(null)}>Back to Selection</button>
         </div>
+
+        <div>
+          <button onClick={handleSaveToServer}>Save to Server</button>
+        </div>  
       </div>
     </div>
   );

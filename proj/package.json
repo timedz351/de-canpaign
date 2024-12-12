@@ -1,5 +1,6 @@
 {
   "name": "proj",
+  "homepage": "https://timedz351.github.io/de-canpaign/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,10 +8,15 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist "
   },
   "dependencies": {
     "@p5-wrapper/react": "^4.4.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "gh-pages": "^6.2.0",
     "p5": "^1.11.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
