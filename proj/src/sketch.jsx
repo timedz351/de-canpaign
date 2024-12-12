@@ -121,6 +121,12 @@ const sketch = (p) => {
     }
   };
 
+  p.touchEnded = () => {
+    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
+      saveCurrentStateToHistory();
+    }
+  };
+
   p.mouseDragged = () => {
     if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
       if (currentMode === "spray") {
@@ -363,7 +369,7 @@ const sketch = (p) => {
     }
   }
 
-  function updateDrips(p) {
+  function updateDrips() {
     for (let i = drips.length - 1; i >= 0; i--) {
       let d = drips[i];
       d.update();
