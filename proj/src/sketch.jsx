@@ -11,9 +11,11 @@ const sketch = (p) => {
 
   let bgLayer;
   let drawLayer;
+  let overlayLayer;
   let uiLayer;
 
   let backgroundImg;
+  let overlayImage;
   let historyStack = [];
   const maxHistory = 20;
   const targetFrameRate = 60;
@@ -40,12 +42,11 @@ const sketch = (p) => {
   p.setup = () => {
     if (!backgroundImg) {
       // default if no image loaded
-      p.createCanvas(800, 600);
+      p.createCanvas(1600, 1100);
       p.background(250);
     } else {
-      const aspectRatio = backgroundImg.height / backgroundImg.width;
-      const canvasWidth = 1000;
-      const canvasHeight = Math.floor(canvasWidth * aspectRatio);
+      const canvasWidth = backgroundImg.height;
+      const canvasHeight = backgroundImg.width;
       p.createCanvas(canvasWidth, canvasHeight);
       p.background(250);
     }
@@ -54,6 +55,8 @@ const sketch = (p) => {
     bgLayer.clear();
     drawLayer = p.createGraphics(p.width, p.height);
     drawLayer.clear();
+    overlayLayer = p.createGraphics(p.width, p.height);
+    overlayLayer.clear()
     uiLayer = p.createGraphics(p.width, p.height);
     uiLayer.clear();
 
@@ -84,6 +87,7 @@ const sketch = (p) => {
 
     p.image(bgLayer, 0, 0);
     p.image(drawLayer, 0, 0);
+    p.image(overlayLayer, 0, 0);
     p.image(uiLayer, 0, 0);
 
     if (p.mouseIsPressed) {
@@ -139,10 +143,18 @@ const sketch = (p) => {
 
   p.updateWithProps = (props) => {
     if (props.billboardImage && props.billboardImage !== p.props?.billboardImage) {
+      console.log(props.billboardImage)
       backgroundImg = p.loadImage(props.billboardImage, () => {
         bgLayer.clear();
         bgLayer.image(backgroundImg, 0, 0, p.width, p.height);
       });
+      let overlayPath = props.billboardImage.substring(0, props.billboardImage.length - 4) + 'Over.png'
+      console.log(overlayPath)
+      overlayImage = p.loadImage(overlayPath, () => {
+        overlayLayer.clear();
+        overlayLayer.image(overlayImage, 0, 0, p.width, p.height);
+      });
+      
     }
 
     if (props.brushSize !== undefined) currentBrushSize = p.constrain(props.brushSize, 2, 100);
@@ -193,6 +205,7 @@ const sketch = (p) => {
   }
 
   function updateSprayUI(p) {
+    
     uiLayer.clear();
     uiLayer.blendMode(p.LIGHTEST);
     uiLayer.noFill();
