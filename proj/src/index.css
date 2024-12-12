@@ -77,3 +77,198 @@ button:focus-visible {
   justify-content: center;
   margin-top: 20px;
 }
+
+/* Base Range Slider Styles */
+input[type="range"] { 
+  margin: auto;
+  -webkit-appearance: none;
+  position: relative;
+  overflow: hidden;
+  height: 30px;
+  width: 200px;
+  cursor: pointer;
+  
+  /* Updated border-radius for a rounded track */
+  border-radius: 20px; /* Increased from 0 to 20px */
+  background: transparent; /* Make background transparent to use track styles */
+}
+
+/* WebKit Browsers (Chrome, Safari, Edge) */
+::-webkit-slider-runnable-track {
+  background: #ddd;
+  
+  /* Rounded track */
+  border-radius: 0px; /* Match the input's border-radius */
+  height: 40px; /* Ensure track height matches input */
+}
+
+::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  
+  /* Make thumb circular */
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Changed from none to 50% for a circle */
+  
+  background: #fff;
+  box-shadow: -120px 0 0 100px dodgerblue; /* Adjusted box-shadow */
+  border: 2px solid #999;
+  
+  /* Add transition for smoothness */
+  transition: background 0.3s, border 0.3s;
+  
+  /* Center the thumb vertically on the track */
+  margin-top: 5px; /* Adjust if necessary */
+}
+
+/* Mozilla Firefox */
+::-moz-range-track {
+  height: 40px;
+  background: #ddd;
+  
+  /* Rounded track */
+  border-radius: 20px; /* Match the input's border-radius */
+}
+
+::-moz-range-thumb {
+  background: #fff;
+  height: 40px;
+  width: 40px; /* Changed from 20px to 40px for consistency */
+  border: 3px solid #999;
+  border-radius: 50%; /* Changed from 0 to 50% for a circle */
+  box-shadow: -100px 0 0 100px dodgerblue; /* Adjusted box-shadow */
+  box-sizing: border-box;
+  
+  /* Add transition for smoothness */
+  transition: background 0.3s, border 0.3s;
+}
+
+/* Microsoft Edge and Internet Explorer */
+::-ms-fill-lower { 
+  background: dodgerblue;
+  border-radius: 20px; /* Rounded lower fill */
+}
+
+::-ms-fill-upper { 
+  background: #ddd;
+  border-radius: 20px; /* Rounded upper fill */
+}
+
+::-ms-thumb { 
+  background: #fff;
+  border: 2px solid #999;
+  height: 40px;
+  width: 40px; /* Changed from 20px to 40px for consistency */
+  border-radius: 50%; /* Changed from none to 50% for a circle */
+  box-shadow: -100px 0 0 100px dodgerblue; /* Adjusted box-shadow */
+  box-sizing: border-box;
+}
+
+::-ms-ticks-after, 
+::-ms-ticks-before { 
+  display: none; 
+}
+
+::-ms-track { 
+  background: #ddd;
+  color: transparent;
+  height: 40px;
+  border: none;
+  
+  /* Rounded track */
+  border-radius: 20px; /* Match the input's border-radius */
+}
+
+
+
+.custom-checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Optional: Adjust spacing as needed */
+  margin: 00px;
+}
+
+/* Hide the default checkbox */
+.custom-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #dfe1e4;
+  border-radius: 72px;
+  border: none;
+  width: 50px;
+  height: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 100ms ease-out;
+  outline: none; /* Remove default outline */
+}
+
+/* Create the circle inside the toggle switch */
+.custom-checkbox::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 28px;
+  height: 28px;
+  background-color: #fff;
+  border: 2px solid #999;
+  border-radius: 50%;
+  transition: left 100ms ease-out;
+}
+
+/* Change background when hovered */
+.custom-checkbox:hover {
+  background-color: #c9cbcd;
+  transition-duration: 0s;
+}
+
+/* Change background when checked */
+.custom-checkbox:checked {
+  background-color: #6ed671;
+}
+
+/* Move the circle to the right when checked */
+.custom-checkbox:checked::after {
+  left: 20px;
+}
+
+/* Change background color on hover when checked */
+.custom-checkbox:checked:hover {
+  background-color: #74ce41;
+}
+
+/* Optional: Focus styles for accessibility */
+.custom-checkbox:focus + .custom-checkbox-label::after {
+  box-shadow: 0 0 0 3px rgba(21, 228, 31, 0.4); /* Blue outline */
+}
+
+.mode-buttons-container {
+  display: flex;
+  gap: 10px;
+}
+
+.mode-button {
+  background-color: #b9b7b7;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.mode-button:hover {
+  background-color: #646cff;
+}
+
+.mode-button.active-mode-button {
+  background-color: #646cff;
+  border: 2px solid #fff;
+}
+
+.mode-button img {
+  width: 20px;
+  height: 20px;
+}

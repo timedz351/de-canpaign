@@ -50,6 +50,7 @@ const sketch = (p) => {
       p.createCanvas(canvasWidth, canvasHeight);
       p.background(250);
     }
+    p.noCursor();
 
     bgLayer = p.createGraphics(p.width, p.height);
     bgLayer.clear();
@@ -112,12 +113,6 @@ const sketch = (p) => {
     }
     if (p.key === "c" || p.key === "C") {
       clearCanvas();
-    }
-  };
-
-  p.mouseReleased = () => {
-    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
-      saveCurrentStateToHistory();
     }
   };
 
