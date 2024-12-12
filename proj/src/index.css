@@ -69,15 +69,6 @@ button:focus-visible {
   box-sizing: border-box;
 }
 
-.controls-container {
-  display: flex;
-  gap: 30px;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
-}
-
 /* Base Range Slider Styles */
 input[type="range"] { 
   margin: auto;
@@ -271,4 +262,177 @@ input[type="range"] {
 .mode-button img {
   width: 20px;
   height: 20px;
+}
+
+.controls-container {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* New Column Styles */
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px; /* Adjust as needed */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Mode Buttons Column */
+.mode-buttons-column {
+  /* Additional styling if needed */
+}
+
+.mode-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mode-button {
+  background-color: #b9b7b7;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s, border 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-button:hover {
+  background-color: #646cff;
+}
+
+.mode-button.active-mode-button {
+  background-color: #646cff;
+  border: 2px solid #fff;
+}
+
+.mode-button img {
+  width: 48px;
+  height: 48px;
+}
+
+.sliders-column {
+  display: block;
+  flex-direction: column;
+  gap: 2px; /* Reduced from 5px */
+  align-items: center;
+}
+
+.slider-container {
+  display: block;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Color Picker and Brush Visualization Column */
+.color-brush-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.color-picker-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.brush-visualization-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.brush-visualization {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+
+/* Other Buttons Column */
+.other-buttons-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.other-controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.other-controls-container button {
+  width: 100px; /* Adjust as needed for consistency */
+}
+
+/* Responsive Design (Optional) */
+@media (max-width: 1200px) {
+  .controls-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .column {
+    min-width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Color Picker and Brush Visualization Column */
+.color-brush-column {
+  display: block;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+}
+
+/* Custom Color Picker Container */
+.custom-color-picker {
+  position: relative;
+  width: 50px; /* Increased width */
+  height: 50px; /* Increased height */
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 2px 5px 6px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.custom-color-picker:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Hide the native color input but keep it clickable */
+.color-picker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* Hide the native color input */
+  cursor: pointer;
+}
+
+/* Custom Color Display */
+.color-display {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 15px;
+  border: 4px solid #313131;
+  box-sizing: border-box;
 }

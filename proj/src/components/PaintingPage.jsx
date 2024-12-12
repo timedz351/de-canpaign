@@ -3,10 +3,9 @@ import { ReactP5Wrapper } from 'react-p5-wrapper';
 import sketch from '../sketch';
 import BillboardSelector from './BillboardSelector';
 
-// Example: You should have these icons in your project or use another source.
-// For instance, place 'spray-icon.png' and 'marker-icon.png' in your public folder.
-import sprayIcon from '../assets/spray-icon.png'; 
-import markerIcon from '../assets/marker-icon.png'; 
+// Import your mode icons
+import sprayIcon from '../assets/spray-icon.png';
+import markerIcon from '../assets/marker-icon.png';
 
 const PaintingPage = () => {
   const [brushSize, setBrushSize] = useState(30);
@@ -64,7 +63,7 @@ const PaintingPage = () => {
     height: `${brushHeight}px`,
     backgroundColor: color,
     borderRadius: '50%',
-    transform: mode === 'marker' ? `rotate(${rotation + Math.PI / 2}rad)` : 'none',
+    transform: mode === 'marker' ? `rotate(${rotation}rad)` : 'none',
     transition: 'all 0.2s ease',
   };
 
@@ -84,35 +83,30 @@ const PaintingPage = () => {
       />
 
       <div className="controls-container">
-        {/* Brush Visualization Container */}
-        <div 
-          className="brush-visualization-container" 
-          style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            minWidth: '150px', 
-            padding: '10px',
-            boxSizing: 'border-box'
-          }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100px' }}>
-            <div style={brushStyle}></div>
+        {/* Column 1: Mode Buttons */}
+        <div className="column mode-buttons-column">
+          <div className="mode-buttons-container">
+            <button 
+              className={`mode-button ${mode === 'spray' ? 'active-mode-button' : ''}`}
+              onClick={() => setMode('spray')}
+              aria-label="Spray Mode"
+            >
+              <img src={sprayIcon} alt="Spray Mode" />
+            </button>
+            <button 
+              className={`mode-button ${mode === 'marker' ? 'active-mode-button' : ''}`}
+              onClick={() => setMode('marker')}
+              aria-label="Marker Mode"
+            >
+              <img src={markerIcon} alt="Marker Mode" />
+            </button>
           </div>
+          <p>Current Mode: {mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
         </div>
 
-        {/* Sliders, color picker, and mode toggling */}
-        <div 
-          className="sliders-container" 
-          style={{
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '20px', 
-            alignItems: 'flex-start'
-          }}
-        >
-          <div>
+        {/* Column 2: Sliders */}
+        <div className="column sliders-column">
+          <div className="slider-container">
             <label>Brush Size: {brushSize}</label><br/>
             <input
               type="range"
@@ -124,7 +118,7 @@ const PaintingPage = () => {
           </div>
           {mode === 'marker' && (
             <>
-              <div>
+              <div className="slider-container">
                 <label>Ovalness: {Math.round(ovalness * 100)}%</label><br/>
                 <input
                   type="range"
@@ -136,7 +130,7 @@ const PaintingPage = () => {
                 />
               </div>
 
-              <div>
+              <div className="slider-container">
                 <label>Rotation: {(rotation * (180 / Math.PI)).toFixed()}°</label><br/>
                 <input
                   type="range"
@@ -162,47 +156,35 @@ const PaintingPage = () => {
               </div>
             </>
           )}
+        </div>
 
-          <div>
+        {/* Column 3: Color Picker and Brush Visualization */}
+        <div className="column color-brush-column">
+          <div className="color-picker-container">
             <label>Color:</label><br/>
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-            />
+            <div className="custom-color-picker">
+              <input
+                type="color"
+                className="color-picker"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              />
+              <span className="color-display" style={{ backgroundColor: color }}></span>
+            </div>
           </div>
-
-          {/* Mode Buttons */}
-          <div className="mode-buttons-container">
-            <button 
-              className={`mode-button ${mode === 'spray' ? 'active-mode-button' : ''}`}
-              onClick={() => setMode('spray')}
-            >
-              <img src={sprayIcon} alt="Spray Mode"/>
-            </button>
-            <button 
-              className={`mode-button ${mode === 'marker' ? 'active-mode-button' : ''}`}
-              onClick={() => setMode('marker')}
-            >
-              <img src={markerIcon} alt="Marker Mode"/>
-            </button>
+          <div className="brush-visualization-container">
+            <div className="brush-visualization">
+              <div style={brushStyle}></div>
+            </div>
           </div>
         </div>
 
-        <div 
-          className="other-controls-container" 
-          style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
-        >
-          <div>
+        {/* Column 4: Other Buttons */}
+        <div className="column other-buttons-column">
+          <div className="other-controls-container">
             <button onClick={handleUndo}>Undo (Z)</button>
             <button onClick={handleClear}>Clear (C)</button>
-          </div>
-
-          <div>
             <button onClick={() => setSelectedBillboard(null)}>Back to Selection</button>
-          </div>
-
-          <div>
             <button onClick={handleSaveToServer}>Save to Server</button>
           </div>
         </div>
