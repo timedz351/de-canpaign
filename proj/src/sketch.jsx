@@ -3,7 +3,6 @@ const sketch = (p) => {
   let smoothedMouseY = 0;
 
   let currentBrushSize = 30;
-
   let currentColor;
   let currentOvalness = 1;
   let currentRotation = 0;
@@ -27,86 +26,43 @@ const sketch = (p) => {
   let previousMouseX;
   let previousMouseY;
 
-  // Define these functions at the top so they're available immediately
-  function saveCurrentStateToHistory() {
-    if (historyStack.length >= maxHistory) {
-      historyStack.shift();
-    }
-    historyStack.push(drawLayer.get());
-  }
-
-  function clearCanvas() {
-    if (historyStack.length > 0) {
-      historyStack = [historyStack[0]];
-    }
-    drips = [];
-    if ( drawLayer) {
-      drawLayer.clear();
-    }
-    
-  }
-
-  function undoLastAction() {
-    if (historyStack.length > 1) {
-      drips = [];
-      historyStack.pop();
-      let previousState = historyStack[historyStack.length - 1];
-      drawLayer.clear();
-      drawLayer.image(previousState, 0, 0);
-    }
-  }
-
-  // Attach these methods to p right away:
-  p.undoLastAction = undoLastAction;
-  p.clearLayer = clearCanvas;
-
-  // Attach setters before setup so they're available at onLoad
-  p.setBrushSize = (newSize) => {
-    currentBrushSize = p.constrain(newSize, 2, 100);
-  };
-
-  p.setColor = (newColor) => {
-    currentColor = p.color(newColor);
-  };
-
-  p.setMode = (mode) => {
-    if (mode === 'spray' || mode === 'marker') {
-      currentMode = mode;
-    }
-  };
-
-  p.setOvalness = (val) => {
-    currentOvalness = val;
-  };
-
-  p.setRotation = (val) => {
-    currentRotation = val;
-  };
-
-  p.setDripsEnabled = (enabled) => {
-    dripsEnabled = enabled;
-  };
+  // Triggers to handle undo/clear
+  let lastUndoCounter = 0;
+  let lastClearCounter = 0;
 
   p.preload = () => {
-    backgroundImg = p.loadImage('/src/assets/pele.jpg');
+    // If billboardImage is set, load it
+    if (p.props && p.props.billboardImage) {
+      backgroundImg = p.loadImage(p.props.billboardImage);
+    }
   };
 
   p.setup = () => {
-    const aspectRatio = backgroundImg.height / backgroundImg.width;
-    const canvasWidth = 1000;
-    const canvasHeight = Math.floor(canvasWidth * aspectRatio);
-
-    p.createCanvas(canvasWidth, canvasHeight);
-    p.background(250);
+    if (!backgroundImg) {
+      // default if no image loaded
+      p.createCanvas(800, 600);
+      p.background(250);
+    } else {
+      const aspectRatio = backgroundImg.height / backgroundImg.width;
+      const canvasWidth = 1000;
+      const canvasHeight = Math.floor(canvasWidth * aspectRatio);
+      p.createCanvas(canvasWidth, canvasHeight);
+      p.background(250);
+    }
 
     bgLayer = p.createGraphics(p.width, p.height);
-    bgLayer.background(250);
+    bgLayer.clear();
     drawLayer = p.createGraphics(p.width, p.height);
     drawLayer.clear();
     uiLayer = p.createGraphics(p.width, p.height);
     uiLayer.clear();
 
-    bgLayer.image(backgroundImg, 0, 0, p.width, p.height);
+    if (backgroundImg) {
+      bgLayer.image(backgroundImg, 0, 0, p.width, p.height);
+    } else {
+      bgLayer.background(250);
+    }
+
     p.frameRate(targetFrameRate);
     currentColor = p.color(0, 0, 0);
 
@@ -145,6 +101,96 @@ const sketch = (p) => {
       updateDrips(p);
     }
   };
+
+  p.keyPressed = () => {
+    if (p.key === "z" || p.key === "Z") {
+      undoLastAction();
+    }
+    if (p.key === "c" || p.key === "C") {
+      clearCanvas();
+    }
+  };
+
+  p.mouseReleased = () => {
+    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
+      saveCurrentStateToHistory();
+    }
+  };
+
+  p.mouseDragged = () => {
+    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
+      if (currentMode === "spray") {
+        emitSpray(p);
+      } else if (currentMode === "marker") {
+        emitMarker(p);
+      }
+    }
+  };
+
+  p.mouseWheel = (event) => {
+    let increment = 4;
+    if (event.delta > 0) {
+      currentBrushSize = p.max(currentBrushSize - increment, 2);
+    } else {
+      currentBrushSize = p.min(currentBrushSize + increment, 100);
+    }
+    return false;
+  };
+
+  p.updateWithProps = (props) => {
+    if (props.billboardImage && props.billboardImage !== p.props?.billboardImage) {
+      backgroundImg = p.loadImage(props.billboardImage, () => {
+        bgLayer.clear();
+        bgLayer.image(backgroundImg, 0, 0, p.width, p.height);
+      });
+    }
+
+    if (props.brushSize !== undefined) currentBrushSize = p.constrain(props.brushSize, 2, 100);
+    if (props.color !== undefined) currentColor = p.color(props.color);
+    if (props.mode !== undefined && (props.mode === 'spray' || props.mode === 'marker')) currentMode = props.mode;
+    if (props.ovalness !== undefined) currentOvalness = props.ovalness;
+    if (props.rotation !== undefined) currentRotation = props.rotation;
+    if (props.dripsEnabled !== undefined) dripsEnabled = props.dripsEnabled;
+
+    // Check undo trigger
+    if (props.undoCounter !== undefined && props.undoCounter !== lastUndoCounter) {
+      lastUndoCounter = props.undoCounter;
+      undoLastAction();
+    }
+
+    // Check clear trigger
+    if (props.clearCounter !== undefined && props.clearCounter !== lastClearCounter) {
+      lastClearCounter = props.clearCounter;
+      clearCanvas();
+    }
+  };
+
+  function saveCurrentStateToHistory() {
+    if (historyStack.length >= maxHistory) {
+      historyStack.shift();
+    }
+    historyStack.push(drawLayer.get());
+  }
+
+  function clearCanvas() {
+    if (historyStack.length > 0) {
+      historyStack = [historyStack[0]];
+    }
+    drips = [];
+    if (drawLayer) {
+      drawLayer.clear();
+    }
+  }
+
+  function undoLastAction() {
+    if (historyStack.length > 1) {
+      drips = [];
+      historyStack.pop();
+      let previousState = historyStack[historyStack.length - 1];
+      drawLayer.clear();
+      drawLayer.image(previousState, 0, 0);
+    }
+  }
 
   function updateSprayUI(p) {
     uiLayer.clear();
@@ -317,45 +363,6 @@ const sketch = (p) => {
       drips[i].show(drawLayer);
     }
   }
-
-  p.mouseDragged = () => {
-    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
-      if (currentMode === "spray") {
-        emitSpray(p);
-      } else if (currentMode === "marker") {
-        emitMarker(p);
-      }
-    }
-  };
-
-  p.mouseWheel = (event) => {
-    let increment = 4;
-    if (event.delta > 0) {
-      currentBrushSize = p.max(currentBrushSize - increment, 2);
-    } else {
-      currentBrushSize = p.min(currentBrushSize + increment, 100);
-    }
-    return false;
-  };
-
-  p.keyPressed = () => {
-    if (p.key === "z" || p.key === "Z") {
-      undoLastAction();
-    }
-    if (p.key === "c" || p.key === "C") {
-      clearCanvas();
-    }
-  };
-
-  p.mouseReleased = () => {
-    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
-      saveCurrentStateToHistory();
-    }
-  };
-
-  p.mousePressed = () => {
-    // If you have spray sound logic, handle it here. Otherwise leave empty.
-  };
 
   class Drip {
     constructor(x, y, col, size) {

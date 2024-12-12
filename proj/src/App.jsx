@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
-import P5Wrapper from './P5Wrapper';
+import { useState } from 'react';
+import { ReactP5Wrapper } from 'react-p5-wrapper';
 import sketch from './sketch';
+import BillboardSelector from './components/BillboardSelector';
 
 const App = () => {
-  // States for parameters
   const [brushSize, setBrushSize] = useState(30);
   const [color, setColor] = useState('#ff0000');
   const [mode, setMode] = useState('spray'); // 'spray' or 'marker'
@@ -11,90 +11,56 @@ const App = () => {
   const [rotation, setRotation] = useState(0);
   const [dripsEnabled, setDripsEnabled] = useState(true);
 
+  // State for billboard selection
+  const [selectedBillboard, setSelectedBillboard] = useState(null);
 
-  // Refs to p5 setter functions and methods
-  const setBrushSizeRef = useRef(null);
-  const setColorRef = useRef(null);
-  const setModeRef = useRef(null);
-  const setOvalnessRef = useRef(null);
-  const setRotationRef = useRef(null);
-  const setDripsEnabledRef = useRef(null);
-  const undoLastActionRef = useRef(null)
-  const clearLayerRef = useRef(null)
-
-  // Update p5 parameters when states change
-  useEffect(() => {
-    if (setBrushSizeRef.current) setBrushSizeRef.current(brushSize);
-  }, [brushSize]);
-
-  useEffect(() => {
-    if (setColorRef.current) setColorRef.current(color);
-  }, [color]);
-
-  useEffect(() => {
-    if (setModeRef.current) setModeRef.current(mode);
-  }, [mode]);
-
-  useEffect(() => {
-    if (setOvalnessRef.current) setOvalnessRef.current(ovalness);
-  }, [ovalness]);
-
-  useEffect(() => {
-    if (setRotationRef.current) setRotationRef.current(rotation);
-  }, [rotation]);
-
-  useEffect(() => {
-    if (setDripsEnabledRef.current) setDripsEnabledRef.current(dripsEnabled);
-  }, [dripsEnabled]);
+  // Counters for triggering undo and clear actions inside the sketch
+  const [undoCounter, setUndoCounter] = useState(0);
+  const [clearCounter, setClearCounter] = useState(0);
 
   const toggleMode = () => {
     setMode(prev => (prev === 'spray' ? 'marker' : 'spray'));
   };
 
   const handleUndo = () => {
-    if (undoLastActionRef.current) {
-      undoLastActionRef.current();
-    };
+    setUndoCounter(prev => prev + 1);
   }
 
   const handleClear = () => {
-    if (clearLayerRef.current) {
-      clearLayerRef.current();
+    setClearCounter(prev => prev + 1);
+  }
 
-    };
+  // If no billboard selected, show the selector
+  if (!selectedBillboard) {
+    return <BillboardSelector onSelect={setSelectedBillboard} />;
   }
 
   return (
-    <div
-      className="app-container"
-    >
-      <P5Wrapper
+    <div className="app-container">
+      <ReactP5Wrapper
         sketch={sketch}
-        setBrushSize={(fn) => (setBrushSizeRef.current = fn)}
-        setColor={(fn) => (setColorRef.current = fn)}
-        setMode={(fn) => (setModeRef.current = fn)}
-        setOvalness={(fn) => (setOvalnessRef.current = fn)}
-        setRotation={(fn) => (setRotationRef.current = fn)}
-        setDripsEnabled={(fn) => (setDripsEnabledRef.current = fn)}
-        undoLastAction={(fn) => (undoLastActionRef.current = fn)}
-        clearLayer={(fn) => (clearLayerRef.current = fn)}
-
+        billboardImage={selectedBillboard}
+        brushSize={brushSize}
+        color={color}
+        mode={mode}
+        ovalness={ovalness}
+        rotation={rotation}
+        dripsEnabled={dripsEnabled}
+        undoCounter={undoCounter}
+        clearCounter={clearCounter}
       />
 
-      <div
-        className="controls-container"
-      >
+      <div className="controls-container">
         <div>
-          <div>
-            <label>Brush Size: {brushSize}</label><br/>
-            <input
-              type="range"
-              min="2"
-              max="100"
-              value={brushSize}
-              onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
-            />
-            {mode === 'marker' && (
+          <label>Brush Size: {brushSize}</label><br/>
+          <input
+            type="range"
+            min="2"
+            max="100"
+            value={brushSize}
+            onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
+          />
+          {mode === 'marker' && (
             <>
               <div>
                 <label>Ovalness: {ovalness}</label><br/>
@@ -131,7 +97,6 @@ const App = () => {
               </div>
             </>
           )}
-          </div>
         </div>
 
         <div>
@@ -153,6 +118,10 @@ const App = () => {
         <div style={{ display: 'block', gap: '20px' }}>
           <button onClick={handleUndo}>Undo (Z)</button>
           <button onClick={handleClear}>Clear (C)</button>
+        </div>
+
+        <div>
+          <button onClick={() => setSelectedBillboard(null)}>Back to Selection</button>
         </div>
       </div>
     </div>
