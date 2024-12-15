@@ -63,7 +63,7 @@ const PaintingPage = () => {
     height: `${brushHeight}px`,
     backgroundColor: color,
     borderRadius: '50%',
-    transform: mode === 'marker' ? `rotate(${rotation}rad)` : 'none',
+    transform: mode === 'marker' ? `rotate(${rotation + Math.PI /2}rad)` : 'none',
     transition: 'all 0.2s ease',
   };
 
