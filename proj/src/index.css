@@ -283,10 +283,6 @@ input[type="range"] {
   box-sizing: border-box;
 }
 
-/* Mode Buttons Column */
-.mode-buttons-column {
-  /* Additional styling if needed */
-}
 
 .mode-buttons-container {
   display: flex;

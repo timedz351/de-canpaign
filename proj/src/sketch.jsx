@@ -32,6 +32,10 @@ const sketch = (p) => {
   let lastUndoCounter = 0;
   let lastClearCounter = 0;
 
+  
+  let eggs = [];
+
+
   p.preload = () => {
     // If billboardImage is set, load it
     if (p.props && p.props.billboardImage) {
@@ -45,8 +49,8 @@ const sketch = (p) => {
       p.createCanvas(1600, 1100);
       p.background(250);
     } else {
-      const canvasWidth = backgroundImg.height;
-      const canvasHeight = backgroundImg.width;
+      const canvasWidth = backgroundImg.width;
+      const canvasHeight = backgroundImg.height;
       p.createCanvas(canvasWidth, canvasHeight);
       p.background(250);
     }
@@ -72,7 +76,12 @@ const sketch = (p) => {
 
     saveCurrentStateToHistory();
   };
-
+  p.mouseClicked= () =>  {
+    if (currentMode === 'egg')
+    {
+      throwEgg(p.mouseX, p.mouseY)
+    }
+  }
   p.draw = () => {
     previousMouseX = p.mouseX;
     previousMouseY = p.mouseY;
@@ -84,6 +93,8 @@ const sketch = (p) => {
       updateSprayUI(p);
     } else if (currentMode === "marker") {
       updateMarkerUI(p);
+    } else if (currentMode === "egg") {
+      updateEggUI();
     }
 
     p.image(bgLayer, 0, 0);
@@ -98,13 +109,26 @@ const sketch = (p) => {
         } else if (currentMode === "marker") {
           emitMarker(p);
           handleDrips(p);
-        }
+        } 
       }
     }
+    p.mouseC
 
     if (drips.length > 0) {
       updateDrips(p);
     }
+
+    if (eggs.length > 0) {
+      for (let i = eggs.length - 1; i >= 0; i--) {
+        eggs[i].update();
+        // Check if the egg has completed its animation
+        if (eggs[i].slideComplete) {
+          saveCurrentStateToHistory(); // Save state after the egg has finished
+          eggs.splice(i, 1); // Remove the egg from the array
+        }
+      }
+    }
+
   };
 
   p.keyPressed = () => {
@@ -117,7 +141,7 @@ const sketch = (p) => {
   };
 
   p.touchEnded = () => {
-    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
+    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width && currentMode != 'egg') {
       saveCurrentStateToHistory();
     }
   };
@@ -144,23 +168,29 @@ const sketch = (p) => {
 
   p.updateWithProps = (props) => {
     if (props.billboardImage && props.billboardImage !== p.props?.billboardImage) {
-      console.log(props.billboardImage)
+      console.log(props.billboardImage);
       backgroundImg = p.loadImage(props.billboardImage, () => {
         bgLayer.clear();
         bgLayer.image(backgroundImg, 0, 0, p.width, p.height);
       });
-      let overlayPath = props.billboardImage.substring(0, props.billboardImage.length - 4) + 'Over.png'
-      console.log(overlayPath)
+      let overlayPath =
+        props.billboardImage.substring(0, props.billboardImage.length - 4) +
+        "Over.png";
+      console.log(overlayPath);
       overlayImage = p.loadImage(overlayPath, () => {
         overlayLayer.clear();
         overlayLayer.image(overlayImage, 0, 0, p.width, p.height);
       });
-      
     }
 
-    if (props.brushSize !== undefined) currentBrushSize = p.constrain(props.brushSize, 2, 100);
+    if (props.brushSize !== undefined)
+      currentBrushSize = p.constrain(props.brushSize, 2, 100);
     if (props.color !== undefined) currentColor = p.color(props.color);
-    if (props.mode !== undefined && (props.mode === 'spray' || props.mode === 'marker')) currentMode = props.mode;
+    if (
+      props.mode !== undefined &&
+      (props.mode === "spray" || props.mode === "marker" || props.mode === "egg")
+    )
+      currentMode = props.mode;
     if (props.ovalness !== undefined) currentOvalness = props.ovalness;
     if (props.rotation !== undefined) currentRotation = props.rotation;
     if (props.dripsEnabled !== undefined) dripsEnabled = props.dripsEnabled;
@@ -177,7 +207,6 @@ const sketch = (p) => {
       clearCanvas();
     }
   };
-
   function saveCurrentStateToHistory() {
     if (historyStack.length >= maxHistory) {
       historyStack.shift();
@@ -232,6 +261,23 @@ const sketch = (p) => {
 
   function updateMarkerUI(p) {
     uiLayer.clear();
+    uiLayer.blendMode(p.LIGHTEST);
+    uiLayer.push();
+    uiLayer.translate(p.mouseX, p.mouseY);
+    uiLayer.rotate(currentRotation);
+    uiLayer.noFill();
+    uiLayer.stroke(0);
+    uiLayer.strokeWeight(3);
+    uiLayer.stroke(255)
+    uiLayer.ellipse(
+      0,
+      0,
+      currentBrushSize * currentOvalness,
+      currentBrushSize
+    );
+    uiLayer.pop();
+
+    uiLayer.blendMode(p.DARKEST);
     uiLayer.push();
     uiLayer.translate(p.mouseX, p.mouseY);
     uiLayer.rotate(currentRotation);
@@ -246,6 +292,7 @@ const sketch = (p) => {
     );
     uiLayer.pop();
 
+    uiLayer.blendMode(p.BLEND);
     uiLayer.push();
     if (p.mouseIsPressed) {
       uiLayer.translate(p.mouseX, p.mouseY);
@@ -256,6 +303,16 @@ const sketch = (p) => {
     uiLayer.rotate(p.PI / 6);
     uiLayer.scale(1);
     marker(p, 0, 0, currentColor);
+    uiLayer.pop();
+  }
+
+  function updateEggUI() {
+    uiLayer.clear();
+    // Optionally, add UI elements specific to egg mode
+    // For example, an egg icon or indicator
+    uiLayer.push();
+    uiLayer.translate(p.mouseX, p.mouseY);
+    eggIcon();
     uiLayer.pop();
   }
 
@@ -282,6 +339,13 @@ const sketch = (p) => {
     drawLowOpacityFill(p, currentCol, smoothedMouseX, smoothedMouseY, size);
     innerCircle(p, size, density, currentCol, smoothedMouseX, smoothedMouseY);
     outerCircle(p, size, density, currentCol, smoothedMouseX, smoothedMouseY);
+  }
+  
+  function throwEgg(targetX, targetY) {
+    let startX = p.width / 2;
+    let startY = p.height + 300; // Adjust as needed
+    let newEgg = new Egg(startX, startY, targetX, targetY);
+    eggs.push(newEgg)
   }
 
   function emitMarker(p) {
@@ -377,7 +441,158 @@ const sketch = (p) => {
       drips[i].show(drawLayer);
     }
   }
-
+  // Egg Class Definition
+  class Egg {
+    constructor(startX, startY, targetX, targetY) {
+      // Flight Parameters
+      this.startX = startX;
+      this.startY = startY;
+      this.targetX = targetX;
+      this.targetY = targetY;
+  
+      this.x = startX;
+      this.y = startY;
+  
+      this.hasHit = false;
+  
+      this.flightFrames = 60; // Number of frames for the flight
+      this.frameCount = 0;
+  
+      // Scaling Parameters
+      this.startScale = 5;
+      this.endScale = 0.7;
+      this.currentScale = this.startScale;
+  
+      // Rotation Parameters
+      this.rotation = 0; // Current rotation angle
+      this.rotationSpeed = 0.1; // Rotation increment per frame
+  
+      // Splash Parameters
+      this.whitePoints = [];
+      this.yolk = { x: targetX, y: targetY, size: p.random(30, 50) };
+      this.noiseOffset = p.random(1000); // For Perlin noise variation
+      this.yolkSlideOffset = 0; // Initial slide offset
+      this.yolkSlideSpeed = p.random(0.1, 0.6); // Slide speed per frame
+      this.maxYolkSlideOffset = p.random(6, 12); // Maximum slide offset
+      this.slideComplete = false; // Flag to indicate if sliding is complete
+  
+      // **Color Variation Properties**
+      // Generate a random light color for the egg shell
+      this.eggColor = p.color(
+        p.random(220, 255), // Red component
+        p.random(220, 255), // Green component
+        p.random(220, 255)  // Blue component
+      );
+  
+      // Generate a random vibrant color for the yolk
+      this.yolkColor = p.color(
+        p.random(200, 255), // Red component
+        p.random(150, 200), // Green component
+        0                    // Blue component (yolk typically lacks blue)
+      );
+    }
+  
+    update() {
+      if (!this.hasHit) {
+        this.frameCount++;
+  
+        // Calculate progress from 0 to 1
+        let t = this.frameCount / this.flightFrames;
+        if (t > 1) t = 1; // Clamp to 1
+  
+        // Interpolate position
+        this.x = p.lerp(this.startX, this.targetX, t);
+        this.y = p.lerp(this.startY, this.targetY, t);
+  
+        // Interpolate scale
+        this.currentScale = p.lerp(this.startScale, this.endScale, t);
+  
+        // Update rotation
+        this.rotation += this.rotationSpeed;
+        if (t < 1) {
+          this.flight();
+        }
+        // Check if the egg has reached the target
+        if (t === 1) {
+          this.hasHit = true;
+          this.generateSplash();
+          this.displaySplash();
+        }
+      } else {
+        // Animate the yolk sliding down after the splash
+        if (this.yolkSlideOffset < this.maxYolkSlideOffset && !this.slideComplete) {
+          this.yolkSlideOffset += this.yolkSlideSpeed;
+          this.displaySplash();
+          if (this.yolkSlideOffset >= this.maxYolkSlideOffset) {
+            this.slideComplete = true; // Mark as complete
+          }
+        }
+      }
+    }
+  
+    flight() {
+      // Display the flying egg with variable color
+      p.push();
+      p.translate(this.x, this.y);
+      p.rotate(this.rotation);
+      p.scale(this.currentScale);
+      p.fill(this.eggColor); // Use the random egg color
+      p.stroke(0);
+      p.strokeWeight(0.5);
+      p.ellipse(0, 0, 100, 140); // Egg shape
+      p.pop();
+    }
+  
+    // Method to generate splash points with smooth, rounded edges
+    generateSplash() {
+      let numPoints = 15; // Number of points for smoother edges
+      let baseRadius = p.random(35, 55); // Base radius for the splash
+      let noiseScale = 0.5; // Scale for noise variation
+  
+      for (let i = 0; i < numPoints; i++) {
+        let angle = p.TWO_PI * (i / numPoints);
+        // Use Perlin noise for smooth radius variation
+        let noiseValue = p.noise(this.noiseOffset + i * noiseScale);
+        let r = baseRadius + p.map(noiseValue, 0, 1, -15, 15);
+        let sx = this.targetX + r * p.cos(angle);
+        let sy = this.targetY + r * p.sin(angle);
+        this.whitePoints.push(p.createVector(sx, sy));
+      }
+    }
+  
+    // Method to display the splash with sliding yolk
+    displaySplash() {
+      // Draw the white splash with smooth curves
+      drawLayer.fill(255, 11); // Semi-transparent white
+      drawLayer.noStroke();
+      drawLayer.beginShape();
+      // To make the shape smooth, use curveVertex and add extra points
+      // at the beginning and end
+      drawLayer.curveVertex(
+        this.whitePoints[this.whitePoints.length - 2].x,
+        this.whitePoints[this.whitePoints.length - 2].y
+      );
+      for (let v of this.whitePoints) {
+        drawLayer.curveVertex(v.x, v.y);
+      }
+      // Repeat the first two points to close the shape smoothly
+      drawLayer.curveVertex(this.whitePoints[0].x, this.whitePoints[0].y);
+      drawLayer.curveVertex(this.whitePoints[1].x, this.whitePoints[1].y);
+      drawLayer.endShape(p.CLOSE);
+  
+      // Draw the yolk sliding down with variable color
+      drawLayer.fill(this.yolkColor); // Use the random yolk color
+      drawLayer.noStroke();
+      drawLayer.ellipse(
+        this.yolk.x,
+        this.yolk.y + this.yolkSlideOffset,
+        this.yolk.size,
+        this.yolk.size
+      );
+    }
+  }
+  
+  
   class Drip {
     constructor(x, y, col, size) {
       this.x = x;
@@ -433,15 +648,26 @@ const sketch = (p) => {
 
   function marker(p, x, y, color) {
     uiLayer.rectMode(p.CENTER);
-    uiLayer.noStroke();
+    uiLayer.stroke(0.5)
     uiLayer.fill(color);
     uiLayer.rect(x, y - 5, 15, 15, 2);
     uiLayer.rect(x, y - 80, 30, 98, 4);
+    uiLayer.noStroke();
     uiLayer.fill(33);
     uiLayer.rect(x, y - 38, 32, 15, 2);
     uiLayer.rect(x, y - 25, 28, 15, 2);
     uiLayer.rect(x, y - 15, 20, 15, 1);
   }
-};
+  
+  function eggIcon() {
+    // Simple egg icon for UI indication
+    uiLayer.fill(255);
+    uiLayer.stroke(0);
+    uiLayer.strokeWeight(2);
+    uiLayer.ellipse(0, 0, 40, 50); // Egg shape
+    uiLayer.fill(255, 204, 0);
+    uiLayer.ellipse(0, 0, 20, 20); // Yolk
+  }
+}
 
 export default sketch;

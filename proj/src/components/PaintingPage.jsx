@@ -1,3 +1,4 @@
+// PaintingPage.jsx
 import { useState } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import sketch from '../sketch';
@@ -6,6 +7,7 @@ import BillboardSelector from './BillboardSelector';
 // Import your mode icons
 import sprayIcon from '../assets/spray-icon.png';
 import markerIcon from '../assets/marker-icon.png';
+import eggIcon from '../assets/egg-icon.png'; // Import the egg icon
 
 const PaintingPage = () => {
   const [brushSize, setBrushSize] = useState(30);
@@ -100,84 +102,94 @@ const PaintingPage = () => {
             >
               <img src={markerIcon} alt="Marker Mode" />
             </button>
+            <button 
+              className={`mode-button ${mode === 'egg' ? 'active-mode-button' : ''}`}
+              onClick={() => setMode('egg')}
+              aria-label="Egg Mode"
+            >
+              <img src={eggIcon} alt="Egg Mode" />
+            </button>
           </div>
-          <p>Current Mode: {mode.charAt(0).toUpperCase() + mode.slice(1)}</p>
         </div>
 
-        {/* Column 2: Sliders */}
-        <div className="column sliders-column">
-          <div className="slider-container">
-            <label>Brush Size: {brushSize}</label><br/>
-            <input
-              type="range"
-              min="2"
-              max="100"
-              value={brushSize}
-              onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
-            />
-          </div>
-          {mode === 'marker' && (
-            <>
-              <div className="slider-container">
-                <label>Ovalness: {Math.round(ovalness * 100)}%</label><br/>
-                <input
-                  type="range"
-                  min="0.3"
-                  max="1"
-                  step="0.01"
-                  value={ovalness}
-                  onChange={(e) => setOvalness(parseFloat(e.target.value))}
-                />
-              </div>
-
-              <div className="slider-container">
-                <label>Rotation: {(rotation * (180 / Math.PI)).toFixed()}°</label><br/>
-                <input
-                  type="range"
-                  min="0"
-                  max={Math.PI / 2}
-                  step="0.01"
-                  value={rotation}
-                  onChange={(e) => setRotation(parseFloat(e.target.value))}
-                />
-              </div>
-
-              <div className="custom-checkbox-wrapper">
-                <input
-                  type="checkbox"
-                  id="drips-checkbox"
-                  className="custom-checkbox"
-                  checked={dripsEnabled}
-                  onChange={(e) => setDripsEnabled(e.target.checked)}
-                />
-                <label htmlFor="drips-checkbox" className="custom-checkbox-label">
-                  Drips
-                </label>
-              </div>
-            </>
-          )}
-        </div>
-
-        {/* Column 3: Color Picker and Brush Visualization */}
-        <div className="column color-brush-column">
-          <div className="color-picker-container">
-            <label>Color:</label><br/>
-            <div className="custom-color-picker">
+        {/* Column 2: Sliders (Hide when mode is 'egg') */}
+        {mode !== 'egg' && (
+          <div className="column sliders-column">
+            <div className="slider-container">
+              <label>Brush Size: {brushSize}</label><br/>
               <input
-                type="color"
-                className="color-picker"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
+                type="range"
+                min="2"
+                max="100"
+                value={brushSize}
+                onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
               />
-              <span className="color-display" style={{ backgroundColor: color }}></span>
+            </div>
+            {mode === 'marker' && (
+              <>
+                <div className="slider-container">
+                  <label>Ovalness: {Math.round(ovalness * 100)}%</label><br/>
+                  <input
+                    type="range"
+                    min="0.3"
+                    max="1"
+                    step="0.01"
+                    value={ovalness}
+                    onChange={(e) => setOvalness(parseFloat(e.target.value))}
+                  />
+                </div>
+
+                <div className="slider-container">
+                  <label>Rotation: {(rotation * (180 / Math.PI)).toFixed()}°</label><br/>
+                  <input
+                    type="range"
+                    min="0"
+                    max={Math.PI / 2}
+                    step="0.01"
+                    value={rotation}
+                    onChange={(e) => setRotation(parseFloat(e.target.value))}
+                  />
+                </div>
+
+                <div className="custom-checkbox-wrapper">
+                  <input
+                    type="checkbox"
+                    id="drips-checkbox"
+                    className="custom-checkbox"
+                    checked={dripsEnabled}
+                    onChange={(e) => setDripsEnabled(e.target.checked)}
+                  />
+                  <label htmlFor="drips-checkbox" className="custom-checkbox-label">
+                    Drips
+                  </label>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Column 3: Color Picker and Brush Visualization (Hide when mode is 'egg') */}
+        {mode !== 'egg' && (
+          <div className="column color-brush-column">
+            <div className="color-picker-container">
+              <label>Color:</label><br/>
+              <div className="custom-color-picker">
+                <input
+                  type="color"
+                  className="color-picker"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                />
+                <span className="color-display" style={{ backgroundColor: color }}></span>
+              </div>
+            </div>
+            <div className="brush-visualization-container">
+              <div className="brush-visualization">
+                <div style={brushStyle}></div>
+              </div>
             </div>
           </div>
-          <div className="brush-visualization-container">
-            <div className="brush-visualization">
-              <div style={brushStyle}></div>
-            </div>
-          </div>
-        </div>
+        )}
 
         {/* Column 4: Other Buttons */}
         <div className="column other-buttons-column">
