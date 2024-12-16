@@ -8,6 +8,8 @@ import BillboardSelector from './BillboardSelector';
 import sprayIcon from '../assets/spray-icon.png';
 import markerIcon from '../assets/marker-icon.png';
 import eggIcon from '../assets/egg-icon.png'; // Import the egg icon
+import undoIcon from '../assets/undo-icon.png';
+import clearIcon from '../assets/clear-icon.png';
 
 const PaintingPage = () => {
   const [brushSize, setBrushSize] = useState(30);
@@ -86,8 +88,8 @@ const PaintingPage = () => {
 
       <div className="controls-container">
         {/* Column 1: Mode Buttons */}
-        <div className="column mode-buttons-column">
-          <div className="mode-buttons-container">
+        <div className="tools-and-undo">
+          <div className="tools">
             <button 
               className={`mode-button ${mode === 'spray' ? 'active-mode-button' : ''}`}
               onClick={() => setMode('spray')}
@@ -108,6 +110,19 @@ const PaintingPage = () => {
               aria-label="Egg Mode"
             >
               <img src={eggIcon} alt="Egg Mode" />
+            </button>
+          </div>
+          <div className='undo-clear'>
+            <button className='mode-button-undo-clear' 
+              onClick={handleUndo}
+              aria-label='Undo'
+            >
+              <img src={undoIcon} alt="Undo" />
+            </button>
+            <button className='mode-button-undo-clear' 
+              onClick={handleClear}
+              aria-label="Clear">
+              <img src={clearIcon} alt="Clear" />
             </button>
           </div>
         </div>
@@ -191,16 +206,16 @@ const PaintingPage = () => {
           </div>
         )}
 
+        
+      </div>
         {/* Column 4: Other Buttons */}
-        <div className="column other-buttons-column">
+        <div className="column other-buttons">
           <div className="other-controls-container">
-            <button onClick={handleUndo}>Undo (Z)</button>
-            <button onClick={handleClear}>Clear (C)</button>
-            <button onClick={() => setSelectedBillboard(null)}>Back to Selection</button>
-            <button onClick={handleSaveToServer}>Save to Server</button>
+            <button className='button-save' onClick={handleSaveToServer}>Upload & Exit</button>
+            <button className='button-exit' onClick={() => setSelectedBillboard(null)}>Exit</button>
           </div>
         </div>
-      </div>
+
     </div>
   );
 };

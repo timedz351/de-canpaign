@@ -9,11 +9,11 @@
   justify-content: center;
   gap: 20px;
   padding: 20px;
-  background-color: #f5f5f5;
+  background-color: #171714;
 }
 
 .billboard-item {
-  background-color: #ffffff;
+  background-color: #cdcdcd;
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
@@ -24,7 +24,7 @@
 
 .billboard-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0px 30px rgba(235, 236, 237, 0.912);
 }
 
 .billboard-image-wrapper {
@@ -41,9 +41,9 @@
 
 .billboard-name {
   font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333333;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
   text-align: center;
   margin: 15px 0;
 }

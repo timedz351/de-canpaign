@@ -1,11 +1,11 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Helvetica;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 700;
 
   color-scheme: light dark;
-  color: rgba(0, 0, 0, 0.87);
-  background-color: #3d2d2d00;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #171714;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,10 +25,10 @@ a:hover {
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #ffffff;
+  background-color: #171714;
   display: flex;
   justify-content: center;  /* Horizontally centers the #root div */
-  min-height: 100vh;
+
   width: 100vw;
   box-sizing: border-box;
 }
@@ -57,6 +57,45 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.button-exit {
+  border-radius: 18px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 900;
+  font-family: inherit;
+  background-color: #f31d1d;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.button-exit:hover {
+  background-color: #fd0000;
+}
+button-exit:focus,
+button-exit:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.button-save {
+  border-radius: 18px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  color: #000000;
+  font-weight: 900;
+  font-family: inherit;
+  background-color: #69f650;
+  cursor: pointer;
+  transition: border-color 0.25s, background-color 0.25s;
+}
+.button-save:hover {
+  background-color: #11ff00;
+}
+.button-save:focus,
+.button-save:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
 /* App-specific styles */
 .app-container {
   display: flex;
@@ -72,6 +111,7 @@ button:focus-visible {
 /* Base Range Slider Styles */
 input[type="range"] { 
   margin: auto;
+  appearance: none ;
   -webkit-appearance: none;
   position: relative;
   overflow: hidden;
@@ -86,7 +126,7 @@ input[type="range"] {
 
 /* WebKit Browsers (Chrome, Safari, Edge) */
 ::-webkit-slider-runnable-track {
-  background: #ddd;
+  background: #7c7c7c;
   
   /* Rounded track */
   border-radius: 0px; /* Match the input's border-radius */
@@ -102,7 +142,7 @@ input[type="range"] {
   border-radius: 50%; /* Changed from none to 50% for a circle */
   
   background: #fff;
-  box-shadow: -120px 0 0 100px dodgerblue; /* Adjusted box-shadow */
+  box-shadow: -120px 0 0 100px rgb(56, 32, 189); /* Adjusted box-shadow */
   border: 2px solid #999;
   
   /* Add transition for smoothness */
@@ -115,7 +155,7 @@ input[type="range"] {
 /* Mozilla Firefox */
 ::-moz-range-track {
   height: 40px;
-  background: #ddd;
+  background: #7c7c7c;
   
   /* Rounded track */
   border-radius: 20px; /* Match the input's border-radius */
@@ -123,11 +163,11 @@ input[type="range"] {
 
 ::-moz-range-thumb {
   background: #fff;
-  height: 40px;
-  width: 40px; /* Changed from 20px to 40px for consistency */
-  border: 3px solid #999;
+  height: 30px;
+  width: 30px; /* Changed from 20px to 40px for consistency */
+  border: 1px solid #fff;
   border-radius: 50%; /* Changed from 0 to 50% for a circle */
-  box-shadow: -100px 0 0 100px dodgerblue; /* Adjusted box-shadow */
+  box-shadow: -120px 0 0 100px #646cff; /* Adjusted box-shadow */
   box-sizing: border-box;
   
   /* Add transition for smoothness */
@@ -147,11 +187,11 @@ input[type="range"] {
 
 ::-ms-thumb { 
   background: #fff;
-  border: 2px solid #999;
+  border: 1px solid #999;
   height: 40px;
   width: 40px; /* Changed from 20px to 40px for consistency */
   border-radius: 50%; /* Changed from none to 50% for a circle */
-  box-shadow: -100px 0 0 100px dodgerblue; /* Adjusted box-shadow */
+  box-shadow: -100px 0 0 100px #646cff; /* Adjusted box-shadow */
   box-sizing: border-box;
 }
 
@@ -202,10 +242,10 @@ input[type="range"] {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 28px;
-  height: 28px;
+  width: 27px;
+  height: 27px;
   background-color: #fff;
-  border: 2px solid #999;
+  border: 1px solid #999;
   border-radius: 50%;
   transition: left 100ms ease-out;
 }
@@ -228,40 +268,32 @@ input[type="range"] {
 
 /* Change background color on hover when checked */
 .custom-checkbox:checked:hover {
-  background-color: #74ce41;
+  background-color: #5ba92e;
 }
 
 /* Optional: Focus styles for accessibility */
 .custom-checkbox:focus + .custom-checkbox-label::after {
-  box-shadow: 0 0 0 3px rgba(21, 228, 31, 0.4); /* Blue outline */
+  box-shadow: 0 0 0 1px rgba(21, 228, 31, 0.4); 
 }
 
-.mode-buttons-container {
+.tools-and-undo {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 70px;
+}
+
+.tools {
   display: flex;
   gap: 10px;
-}
+  top: 10px;
 
-.mode-button {
-  background-color: #b9b7b7;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
 }
+.undo-clear {
+  display: flex;
+  gap: 10px;
 
-.mode-button:hover {
-  background-color: #646cff;
-}
-
-.mode-button.active-mode-button {
-  background-color: #646cff;
-  border: 2px solid #fff;
-}
-
-.mode-button img {
-  width: 20px;
-  height: 20px;
 }
 
 .controls-container {
@@ -270,7 +302,16 @@ input[type="range"] {
   width: 100%;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 10px;
+  align-items: auto;
+
+  border-radius: 20px;
+  height: 240px;
+  width: 700px;
+  font-size: 1em;
+  font-weight: 700;
+  font-family: inherit;
+  background-color: #252525;
 }
 
 /* New Column Styles */
@@ -286,7 +327,7 @@ input[type="range"] {
 
 .mode-buttons-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
   margin-bottom: 10px;
 }
@@ -309,13 +350,41 @@ input[type="range"] {
 
 .mode-button.active-mode-button {
   background-color: #646cff;
-  border: 2px solid #fff;
+  border: 2px solid #3d42a9;
 }
 
 .mode-button img {
   width: 48px;
   height: 48px;
 }
+
+.mode-button-undo-clear {
+  background-color: #b9b7b7;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s, border 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-button-undo-clear:hover {
+  background-color: #646cff;
+}
+
+.mode-button-undo-clear.active-mode-button {
+  background-color: #646cff;
+  border: 2px solid #3d42a9;
+}
+
+.mode-button-undo-clear img {
+  width: 48px;
+  height: 48px;
+}
+
+
 
 .sliders-column {
   display: block;
@@ -357,8 +426,8 @@ input[type="range"] {
   min-height: 100px;
 }
 
-/* Other Buttons Column */
-.other-buttons-column {
+/* Other Buttons */
+.other-buttons {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -366,7 +435,7 @@ input[type="range"] {
 
 .other-controls-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 }
 
@@ -375,22 +444,27 @@ input[type="range"] {
 }
 
 /* Responsive Design (Optional) */
-@media (max-width: 1200px) {
+@media (max-width: 1920px) {
   .controls-container {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
+    border-radius: 8px;
+    border: 1px solid transparent;
+
+    height: 300px;
+    font-size: 1em;
+    font-weight: 700;
+    font-family: inherit;
+    background-color: #252525;
+
   }
 
-  .column {
-    min-width: 100%;
-    max-width: 300px;
-  }
 }
 
 /* Color Picker and Brush Visualization Column */
 .color-brush-column {
   display: block;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0px;
 }
@@ -429,6 +503,6 @@ input[type="range"] {
   width: 100%;
   height: 100%;
   border-radius: 15px;
-  border: 4px solid #313131;
+  border: 4px solid #ebebeb;
   box-sizing: border-box;
 }

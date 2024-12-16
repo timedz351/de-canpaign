@@ -17,7 +17,7 @@ const sketch = (p) => {
   let backgroundImg;
   let overlayImage;
   let historyStack = [];
-  const maxHistory = 20;
+  const maxHistory = 35;
   const targetFrameRate = 60;
   let smoothFactor = 0.18;
 
@@ -207,6 +207,13 @@ const sketch = (p) => {
       clearCanvas();
     }
   };
+
+  p.mouseReleased = () =>  {
+    if (currentMode === 'spray' || currentMode === 'marker') {
+      saveCurrentStateToHistory()
+    }
+  }
+
   function saveCurrentStateToHistory() {
     if (historyStack.length >= maxHistory) {
       historyStack.shift();
@@ -661,12 +668,20 @@ const sketch = (p) => {
   
   function eggIcon() {
     // Simple egg icon for UI indication
-    uiLayer.fill(255);
+    // uiLayer.fill(255);
+    // uiLayer.stroke(0);
+    // uiLayer.strokeWeight(2);
+    // uiLayer.ellipse(0, 0, 40, 50); // Egg shape
+    // uiLayer.fill(255, 204, 0);
+    // uiLayer.ellipse(0, 0, 20, 20); // Yolk
+
+    uiLayer.noFill();
     uiLayer.stroke(0);
-    uiLayer.strokeWeight(2);
-    uiLayer.ellipse(0, 0, 40, 50); // Egg shape
-    uiLayer.fill(255, 204, 0);
-    uiLayer.ellipse(0, 0, 20, 20); // Yolk
+    uiLayer.strokeWeight(1);
+    uiLayer.line(-20, 0, 20, 0)
+    uiLayer.line(0, -20, 0, 20)
+    uiLayer.circle(0,0, 30)
+
   }
 }
 
