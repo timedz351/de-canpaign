@@ -1,15 +1,17 @@
 // PaintingPage.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ReactP5Wrapper } from 'react-p5-wrapper';
 import sketch from '../sketch';
 import BillboardSelector from './BillboardSelector';
 
-// Import your mode icons
 import sprayIcon from '../assets/spray-icon.png';
 import markerIcon from '../assets/marker-icon.png';
-import eggIcon from '../assets/egg-icon.png'; // Import the egg icon
+import eggIcon from '../assets/egg-icon.png';
 import undoIcon from '../assets/undo-icon.png';
 import clearIcon from '../assets/clear-icon.png';
+
+// Import your spray sound
+import spraySoundFile from '../assets/spray.mp3';
 
 const PaintingPage = () => {
   const [brushSize, setBrushSize] = useState(30);
@@ -21,6 +23,52 @@ const PaintingPage = () => {
   const [selectedBillboard, setSelectedBillboard] = useState(null);
   const [undoCounter, setUndoCounter] = useState(0);
   const [clearCounter, setClearCounter] = useState(0);
+
+  // Create the audio element once and reuse it
+  const [spraySound] = useState(() => {
+    const audio = new Audio(spraySoundFile);
+    audio.loop = true; // We want it to loop as long as user is pressing
+    return audio;
+  });
+
+  useEffect(() => {
+    const canvas = document.querySelector('canvas');
+    if (!canvas) return;
+
+    const handlePointerDown = () => {
+      if (mode === 'spray') {
+        // Play sound if not already playing
+        if (spraySound.paused) {
+          spraySound.currentTime = 0;
+          spraySound.play().catch(err => {
+            console.log('Audio play issue:', err);
+          });
+        }
+      }
+    };
+
+    const handlePointerUp = () => {
+      // Stop the sound when pointer is released
+      if (!spraySound.paused) {
+        spraySound.pause();
+        spraySound.currentTime = 0;
+      }
+    };
+
+    // Attach event listeners
+    canvas.addEventListener('pointerdown', handlePointerDown);
+    canvas.addEventListener('pointerup', handlePointerUp);
+    canvas.addEventListener('pointerleave', handlePointerUp); 
+    canvas.addEventListener('pointercancel', handlePointerUp);
+
+    // Cleanup on unmount or re-render
+    return () => {
+      canvas.removeEventListener('pointerdown', handlePointerDown);
+      canvas.removeEventListener('pointerup', handlePointerUp);
+      canvas.removeEventListener('pointerleave', handlePointerUp);
+      canvas.removeEventListener('pointercancel', handlePointerUp);
+    };
+  }, [mode, spraySound]);
 
   if (!selectedBillboard) {
     return (
