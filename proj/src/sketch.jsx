@@ -46,7 +46,7 @@ const sketch = (p) => {
   p.setup = () => {
     if (!backgroundImg) {
       // default if no image loaded
-      p.createCanvas(1600, 1100);
+      p.createCanvas(1700, 1150);
       p.background(250);
     } else {
       const canvasWidth = backgroundImg.width;
@@ -79,7 +79,9 @@ const sketch = (p) => {
   p.mouseClicked= () =>  {
     if (currentMode === 'egg')
     {
+      if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
       throwEgg(p.mouseX, p.mouseY)
+      }
     }
   }
   p.draw = () => {
@@ -167,8 +169,14 @@ const sketch = (p) => {
   };
 
   p.updateWithProps = (props) => {
+
+    if (props.undoCounter !== undefined && props.undoCounter !== lastUndoCounter) {
+      lastUndoCounter = props.undoCounter;
+      undoLastAction();
+      return
+    }
+
     if (props.billboardImage && props.billboardImage !== p.props?.billboardImage) {
-      console.log(props.billboardImage);
       backgroundImg = p.loadImage(props.billboardImage, () => {
         bgLayer.clear();
         bgLayer.image(backgroundImg, 0, 0, p.width, p.height);
@@ -196,10 +204,7 @@ const sketch = (p) => {
     if (props.dripsEnabled !== undefined) dripsEnabled = props.dripsEnabled;
 
     // Check undo trigger
-    if (props.undoCounter !== undefined && props.undoCounter !== lastUndoCounter) {
-      lastUndoCounter = props.undoCounter;
-      undoLastAction();
-    }
+    
 
     // Check clear trigger
     if (props.clearCounter !== undefined && props.clearCounter !== lastClearCounter) {

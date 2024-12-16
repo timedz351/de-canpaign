@@ -69,6 +69,7 @@ const PaintingPage = () => {
     borderRadius: '50%',
     transform: mode === 'marker' ? `rotate(${rotation + Math.PI /2}rad)` : 'none',
     transition: 'all 0.2s ease',
+    boxShadow: '0 -1px 15px rgba(0, 0, 0, 0.5)',
   };
 
   return (

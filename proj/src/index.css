@@ -22,7 +22,8 @@ a:hover {
   color: #535bf2;
 }
 
-body {
+html, body {
+  overscroll-behavior-x: none;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background-color: #171714;
@@ -305,9 +306,9 @@ input[type="range"] {
   margin-top: 10px;
   align-items: auto;
 
-  border-radius: 20px;
-  height: 240px;
-  width: 700px;
+  border-radius: 40px;
+  height: 260px;
+  width: 750px;
   font-size: 1em;
   font-weight: 700;
   font-family: inherit;
@@ -374,10 +375,6 @@ input[type="range"] {
   background-color: #646cff;
 }
 
-.mode-button-undo-clear.active-mode-button {
-  background-color: #646cff;
-  border: 2px solid #3d42a9;
-}
 
 .mode-button-undo-clear img {
   width: 48px;
@@ -389,6 +386,7 @@ input[type="range"] {
 .sliders-column {
   display: block;
   flex-direction: column;
+  margin: 7px;
   gap: 2px; /* Reduced from 5px */
   align-items: center;
 }
@@ -417,6 +415,7 @@ input[type="range"] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 20px;
 }
 
 .brush-visualization {
@@ -424,6 +423,17 @@ input[type="range"] {
   justify-content: center;
   align-items: center;
   min-height: 100px;
+
+  /* Add a white background and make it square */
+  width: 100px; /* Adjust this if you need a different size */
+  height: 100px; 
+  background-color: #ffffff;
+
+  /* Add a drop shadow */
+  
+
+  /* Optional: Add border-radius if desired */
+  border-radius: 8px; 
 }
 
 /* Other Buttons */
