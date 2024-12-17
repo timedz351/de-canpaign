@@ -160,7 +160,7 @@ const PaintingPage = () => {
                   <input
                     type="range"
                     min="0"
-                    max={Math.PI / 2}
+                    max={Math.PI}
                     step="0.01"
                     value={rotation}
                     onChange={(e) => setRotation(parseFloat(e.target.value))}

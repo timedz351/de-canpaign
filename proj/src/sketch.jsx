@@ -91,13 +91,19 @@ const sketch = (p) => {
     smoothedMouseX = p.lerp(smoothedMouseX, p.mouseX, smoothFactor);
     smoothedMouseY = p.lerp(smoothedMouseY, p.mouseY, smoothFactor);
 
-    if (currentMode === "spray") {
-      updateSprayUI(p);
-    } else if (currentMode === "marker") {
-      updateMarkerUI(p);
-    } else if (currentMode === "egg") {
-      updateEggUI();
+    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
+      if (currentMode === "spray") {
+        updateSprayUI(p);
+      } else if (currentMode === "marker") {
+        updateMarkerUI(p);
+      } else if (currentMode === "egg") {
+        updateEggUI();
+      }
+    } else  {
+      uiLayer.clear()
     }
+
+    // currentBrushSize = p.map(p.mouseY, p.height, 0, -40, 100)
 
     p.image(bgLayer, 0, 0);
     p.image(drawLayer, 0, 0);
