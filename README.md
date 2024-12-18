@@ -1,4 +1,7 @@
+demo version available at: [timedz351.github.io/de-canpaign](https://timedz351.github.io/de-canpaign/)
+
 # de-canpaign
+[![Project presentation](https://img.youtube.com/vi/X7YoJxtJVIY/0.jpg)](https://www.youtube.com/watch?v=X7YoJxtJVIY)
 ## About
 is an app where you are able to choose from a set of billboards from local czech and slovak political campaigns and then freely and anonymously digitally vandalize them. These creations are then saved to a gallery and presented on an extra monitor. Users would interact with the app using a graphic tablet with acces to spray or marker with option to turn on/off drips. 
 
@@ -36,4 +39,5 @@ in new console:
 
 ### How to use:
 open `http://localhost:5173/` in browser to paint
+
 open `http://localhost:5173/gallery` to view gallery
