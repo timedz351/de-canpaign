@@ -7,6 +7,16 @@ const billboards = [
   { id: 4, name: "Uhrík", src: "/images/uhrik.png" },
   { id: 5, name: "Matovič", src: "/images/matovic.png" },
   { id: 6, name: "Babiš", src: "/images/babis.png" },
+  { id: 7, name: "Kollár", src: "/images/kollar.png" },
+  { id: 8, name: "Huliak", src: "/images/huliak.png" },
+  { id: 9, name: "Šlachta", src: "/images/slachta.png" },
+  { id: 10, name: "Sulík", src: "/images/sulik.png" },
+  { id: 11, name: "Zeman", src: "/images/zeman.png" },
+  { id: 12, name: "Rakušan & Bartoš", src: "/images/rakusan_bartos.png" },
+  { id: 13, name: "Zeman", src: "/images/zeman.png" },
+  { id: 14, name: "Okamura", src: "/images/okamura.png" },
+  { id: 15, name: "Pavel", src: "/images/pavel.png" },
+  
 ];
 
 // eslint-disable-next-line react/prop-types
