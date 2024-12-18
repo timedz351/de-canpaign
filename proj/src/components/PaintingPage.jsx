@@ -57,6 +57,7 @@ const PaintingPage = () => {
           console.error('Error saving image:', err);
         });
     }
+    setSelectedBillboard(null)
   };
 
   // Determine brush visualization styles
