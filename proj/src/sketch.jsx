@@ -46,7 +46,7 @@ const sketch = (p) => {
   p.setup = () => {
     if (!backgroundImg) {
       // default if no image loaded
-      p.createCanvas(1700, 1150);
+      p.createCanvas(1300, 950);
       p.background(250);
     } else {
       const canvasWidth = backgroundImg.width;

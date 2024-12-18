@@ -86,137 +86,137 @@ const PaintingPage = () => {
         undoCounter={undoCounter}
         clearCounter={clearCounter}
       />
-
-      <div className="controls-container">
-        {/* Column 1: Mode Buttons */}
-        <div className="tools-and-undo">
-          <div className="tools">
-            <button 
-              className={`mode-button ${mode === 'spray' ? 'active-mode-button' : ''}`}
-              onClick={() => setMode('spray')}
-              aria-label="Spray Mode"
-            >
-              <img src={sprayIcon} alt="Spray Mode" />
-            </button>
-            <button 
-              className={`mode-button ${mode === 'marker' ? 'active-mode-button' : ''}`}
-              onClick={() => setMode('marker')}
-              aria-label="Marker Mode"
-            >
-              <img src={markerIcon} alt="Marker Mode" />
-            </button>
-            <button 
-              className={`mode-button ${mode === 'egg' ? 'active-mode-button' : ''}`}
-              onClick={() => setMode('egg')}
-              aria-label="Egg Mode"
-            >
-              <img src={eggIcon} alt="Egg Mode" />
-            </button>
-          </div>
-          <div className='undo-clear'>
-            <button className='mode-button-undo-clear' 
-              onClick={handleUndo}
-              aria-label='Undo'
-            >
-              <img src={undoIcon} alt="Undo" />
-            </button>
-            <button className='mode-button-undo-clear' 
-              onClick={handleClear}
-              aria-label="Clear">
-              <img src={clearIcon} alt="Clear" />
-            </button>
-          </div>
-        </div>
-
-        {/* Column 2: Sliders (Hide when mode is 'egg') */}
-        {mode !== 'egg' && (
-          <div className="column sliders-column">
-            <div className="slider-container">
-              <label>Brush Size: {brushSize}</label><br/>
-              <input
-                type="range"
-                min="2"
-                max="100"
-                value={brushSize}
-                onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
-              />
+      <div className='controlPanel'>
+        <div className="controls-container">
+          {/* Mode Buttons */}
+          <div className="tools-and-undo">
+            <div className="tools">
+              <button 
+                className={`mode-button ${mode === 'spray' ? 'active-mode-button' : ''}`}
+                onClick={() => setMode('spray')}
+                aria-label="Spray Mode"
+              >
+                <img src={sprayIcon} alt="Spray Mode" />
+              </button>
+              <button 
+                className={`mode-button ${mode === 'marker' ? 'active-mode-button' : ''}`}
+                onClick={() => setMode('marker')}
+                aria-label="Marker Mode"
+              >
+                <img src={markerIcon} alt="Marker Mode" />
+              </button>
+              <button 
+                className={`mode-button ${mode === 'egg' ? 'active-mode-button' : ''}`}
+                onClick={() => setMode('egg')}
+                aria-label="Egg Mode"
+              >
+                <img src={eggIcon} alt="Egg Mode" />
+              </button>
             </div>
-            {mode === 'marker' && (
-              <>
-                <div className="slider-container">
-                  <label>Ovalness: {Math.round(ovalness * 100)}%</label><br/>
-                  <input
-                    type="range"
-                    min="0.3"
-                    max="1"
-                    step="0.01"
-                    value={ovalness}
-                    onChange={(e) => setOvalness(parseFloat(e.target.value))}
-                  />
-                </div>
-
-                <div className="slider-container">
-                  <label>Rotation: {(rotation * (180 / Math.PI)).toFixed()}°</label><br/>
-                  <input
-                    type="range"
-                    min="0"
-                    max={Math.PI}
-                    step="0.01"
-                    value={rotation}
-                    onChange={(e) => setRotation(parseFloat(e.target.value))}
-                  />
-                </div>
-
-                <div className="custom-checkbox-wrapper">
-                  <input
-                    type="checkbox"
-                    id="drips-checkbox"
-                    className="custom-checkbox"
-                    checked={dripsEnabled}
-                    onChange={(e) => setDripsEnabled(e.target.checked)}
-                  />
-                  <label htmlFor="drips-checkbox" className="custom-checkbox-label">
-                    Drips
-                  </label>
-                </div>
-              </>
-            )}
+            <div className='undo-clear'>
+              <button className='mode-button-undo-clear' 
+                onClick={handleUndo}
+                aria-label='Undo'
+              >
+                <img src={undoIcon} alt="Undo" />
+              </button>
+              <button className='mode-button-undo-clear' 
+                onClick={handleClear}
+                aria-label="Clear">
+                <img src={clearIcon} alt="Clear" />
+              </button>
+            </div>
           </div>
-        )}
 
-        {/* Column 3: Color Picker and Brush Visualization (Hide when mode is 'egg') */}
-        {mode !== 'egg' && (
-          <div className="column color-brush-column">
-            <div className="color-picker-container">
-              <label>Color:</label><br/>
-              <div className="custom-color-picker">
+          {/*Sliders (Hide when mode is 'egg') */}
+          {mode !== 'egg' && (
+            <div className="column sliders-column">
+              <div className="slider-container">
+                <label>Brush Size: {brushSize}</label><br/>
                 <input
-                  type="color"
-                  className="color-picker"
-                  value={color}
-                  onChange={(e) => setColor(e.target.value)}
+                  type="range"
+                  min="2"
+                  max="100"
+                  value={brushSize}
+                  onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
                 />
-                <span className="color-display" style={{ backgroundColor: color }}></span>
               </div>
-            </div>
-            <div className="brush-visualization-container">
-              <div className="brush-visualization">
-                <div style={brushStyle}></div>
-              </div>
-            </div>
-          </div>
-        )}
+              {mode === 'marker' && (
+                <>
+                  <div className="slider-container">
+                    <label>Ovalness: {Math.round(ovalness * 100)}%</label><br/>
+                    <input
+                      type="range"
+                      min="0.3"
+                      max="1"
+                      step="0.01"
+                      value={ovalness}
+                      onChange={(e) => setOvalness(parseFloat(e.target.value))}
+                    />
+                  </div>
 
-        
-      </div>
-        {/* Column 4: Other Buttons */}
-        <div className="column other-buttons">
-          <div className="other-controls-container">
-            <button className='button-save' onClick={handleSaveToServer}>Upload & Exit</button>
-            <button className='button-exit' onClick={() => setSelectedBillboard(null)}>Exit</button>
+                  <div className="slider-container">
+                    <label>Rotation: {(rotation * (180 / Math.PI)).toFixed()}°</label><br/>
+                    <input
+                      type="range"
+                      min="0"
+                      max={Math.PI}
+                      step="0.01"
+                      value={rotation}
+                      onChange={(e) => setRotation(parseFloat(e.target.value))}
+                    />
+                  </div>
+
+                  <div className="custom-checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      id="drips-checkbox"
+                      className="custom-checkbox"
+                      checked={dripsEnabled}
+                      onChange={(e) => setDripsEnabled(e.target.checked)}
+                    />
+                    <label htmlFor="drips-checkbox" className="custom-checkbox-label">
+                      Drips
+                    </label>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Color Picker and Brush Visualization (Hide when mode is 'egg') */}
+          {mode !== 'egg' && (
+            <div className="column color-brush-column">
+              <div className="color-picker-container">
+                <label>Color:</label><br/>
+                <div className="custom-color-picker">
+                  <input
+                    type="color"
+                    className="color-picker"
+                    value={color}
+                    onChange={(e) => setColor(e.target.value)}
+                  />
+                  <span className="color-display" style={{ backgroundColor: color }}></span>
+                </div>
+              </div>
+              <div className="brush-visualization-container">
+                <div className="brush-visualization">
+                  <div style={brushStyle}></div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          
+        </div>
+          {/* Other Buttons */}
+          <div className="column other-buttons">
+            <div className="other-controls-container">
+              <button className='button-save' onClick={handleSaveToServer}>Upload & Exit</button>
+              <button className='button-exit' onClick={() => setSelectedBillboard(null)}>Exit</button>
+            </div>
           </div>
         </div>
-
     </div>
   );
 };

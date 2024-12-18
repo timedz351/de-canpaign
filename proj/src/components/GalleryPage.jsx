@@ -34,7 +34,7 @@ const GalleryPage = () => {
       // Automatically advance the carousel every 5 seconds
       const interval = setInterval(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-      }, 5000);
+      }, 3800);
 
       return () => clearInterval(interval);
     }
