@@ -163,7 +163,15 @@ const sketch = (p) => {
       }
     }
   };
-
+  
+  p.mouseReleased = () =>  {
+    if (p.mouseY < p.height && p.mouseY > 0 && p.mouseX > 0 && p.mouseX < p.width) {
+      if (currentMode === 'spray' || currentMode === 'marker') {
+        saveCurrentStateToHistory()
+      }
+    }
+  }
+  
   p.mouseWheel = (event) => {
     let increment = 4;
     if (event.delta > 0) {
@@ -219,11 +227,6 @@ const sketch = (p) => {
     }
   };
 
-  p.mouseReleased = () =>  {
-    if (currentMode === 'spray' || currentMode === 'marker') {
-      saveCurrentStateToHistory()
-    }
-  }
 
   function saveCurrentStateToHistory() {
     if (historyStack.length >= maxHistory) {
